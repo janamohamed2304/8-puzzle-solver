@@ -41,11 +41,11 @@ public class Main {
         Node start = new Node(initialState, null, null, 0, 0);
 
 
-//        DFS test = new DFS();
-//        test.DFS("123405678");
+       DFS test = new DFS();
+       test.DFS("123405678");
 
-        IDFS test2 = new IDFS();
-        List<Pair> res = test2.iddfs("341208756");
+        // IDFS test2 = new IDFS();
+        // List<Pair> res = test2.iddfs("341208756");
 
 //        for(Pair i : res){
 //            System.out.println(i.getDirection());
