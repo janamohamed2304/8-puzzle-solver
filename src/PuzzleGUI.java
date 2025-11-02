@@ -16,11 +16,21 @@ public class PuzzleGUI extends JFrame {
     private String currentState = "123405678";
     private boolean isAnimating = false;
 
+    // Red, Black, White color scheme
+    private final Color DARK_RED = new Color(139, 0, 0);
+    private final Color BRIGHT_RED = new Color(220, 20, 60);
+    private final Color LIGHT_RED = new Color(255, 69, 69);
+    private final Color BLACK = new Color(20, 20, 20);
+    private final Color DARK_GRAY = new Color(40, 40, 40);
+    private final Color WHITE = new Color(255, 255, 255);
+    private final Color OFF_WHITE = new Color(240, 240, 240);
+
     public PuzzleGUI() {
         setTitle("8-Puzzle Solver");
         setSize(600, 700);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout(10, 10));
+        getContentPane().setBackground(BLACK);
 
         initializeComponents();
         updateBoard(currentState);
@@ -32,7 +42,7 @@ public class PuzzleGUI extends JFrame {
     private void initializeComponents() {
         // Board Panel
         boardPanel = new JPanel(new GridLayout(3, 3, 5, 5));
-        boardPanel.setBackground(new Color(52, 73, 94));
+        boardPanel.setBackground(BLACK);
         boardPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
         for (int i = 0; i < 3; i++) {
@@ -40,9 +50,9 @@ public class PuzzleGUI extends JFrame {
                 tiles[i][j] = new JButton();
                 tiles[i][j].setFont(new Font("Arial", Font.BOLD, 48));
                 tiles[i][j].setFocusPainted(false);
-                tiles[i][j].setBackground(new Color(52, 152, 219));
-                tiles[i][j].setForeground(Color.WHITE);
-                tiles[i][j].setBorder(BorderFactory.createLineBorder(new Color(41, 128, 185), 2));
+                tiles[i][j].setBackground(BRIGHT_RED);
+                tiles[i][j].setForeground(WHITE);
+                tiles[i][j].setBorder(BorderFactory.createLineBorder(DARK_RED, 3));
                 boardPanel.add(tiles[i][j]);
             }
         }
@@ -51,45 +61,69 @@ public class PuzzleGUI extends JFrame {
         controlPanel = new JPanel();
         controlPanel.setLayout(new BoxLayout(controlPanel, BoxLayout.Y_AXIS));
         controlPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+        controlPanel.setBackground(BLACK);
 
         // Initial State Input
         JPanel inputPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        inputPanel.add(new JLabel("Initial State (9 digits):"));
+        inputPanel.setBackground(BLACK);
+        JLabel stateLabel = new JLabel("Initial State (9 digits):");
+        stateLabel.setForeground(WHITE);
+        stateLabel.setFont(new Font("Arial", Font.BOLD, 14));
+        inputPanel.add(stateLabel);
+
         initialStateField = new JTextField(currentState, 15);
+        initialStateField.setBackground(DARK_GRAY);
+        initialStateField.setForeground(WHITE);
+        initialStateField.setCaretColor(WHITE);
+        initialStateField.setFont(new Font("Arial", Font.PLAIN, 14));
+        initialStateField.setBorder(BorderFactory.createLineBorder(DARK_RED, 2));
         inputPanel.add(initialStateField);
         controlPanel.add(inputPanel);
 
         // Algorithm Selector
         JPanel algoPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        algoPanel.add(new JLabel("Algorithm:"));
+        algoPanel.setBackground(BLACK);
+        JLabel algoLabel = new JLabel("Algorithm:");
+        algoLabel.setForeground(WHITE);
+        algoLabel.setFont(new Font("Arial", Font.BOLD, 14));
+        algoPanel.add(algoLabel);
+
         String[] algorithms = {"BFS", "A* (AStar)", "IDDFS", "DFS"};
         algorithmSelector = new JComboBox<>(algorithms);
+        algorithmSelector.setBackground(DARK_GRAY);
+        algorithmSelector.setForeground(WHITE);
+        algorithmSelector.setFont(new Font("Arial", Font.PLAIN, 14));
+        algorithmSelector.setBorder(BorderFactory.createLineBorder(DARK_RED, 2));
         algoPanel.add(algorithmSelector);
         controlPanel.add(algoPanel);
 
         // Buttons
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
+        buttonPanel.setBackground(BLACK);
 
         solveButton = new JButton("Solve");
-        solveButton.setBackground(new Color(46, 125, 204));
-        solveButton.setForeground(Color.WHITE);
+        solveButton.setBackground(BRIGHT_RED);
+        solveButton.setForeground(WHITE);
         solveButton.setFont(new Font("Arial", Font.BOLD, 14));
         solveButton.setFocusPainted(false);
+        solveButton.setBorder(BorderFactory.createLineBorder(DARK_RED, 2));
         solveButton.addActionListener(e -> solvePuzzle());
 
         startButton = new JButton("Start Animation");
-        startButton.setBackground(new Color(52, 152, 219));
-        startButton.setForeground(Color.WHITE);
+        startButton.setBackground(DARK_RED);
+        startButton.setForeground(WHITE);
         startButton.setFont(new Font("Arial", Font.BOLD, 14));
         startButton.setFocusPainted(false);
+        startButton.setBorder(BorderFactory.createLineBorder(DARK_RED, 2));
         startButton.setEnabled(false);
         startButton.addActionListener(e -> startAnimation());
 
         resetButton = new JButton("Reset");
-        resetButton.setBackground(new Color(12, 21, 58));
-        resetButton.setForeground(Color.WHITE);
+        resetButton.setBackground(DARK_GRAY);
+        resetButton.setForeground(WHITE);
         resetButton.setFont(new Font("Arial", Font.BOLD, 14));
         resetButton.setFocusPainted(false);
+        resetButton.setBorder(BorderFactory.createLineBorder(DARK_RED, 2));
         resetButton.addActionListener(e -> resetPuzzle());
 
         buttonPanel.add(solveButton);
@@ -99,7 +133,8 @@ public class PuzzleGUI extends JFrame {
 
         // Status Label
         statusLabel = new JLabel("Enter initial state and select algorithm");
-        statusLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+        statusLabel.setFont(new Font("Arial", Font.BOLD, 14));
+        statusLabel.setForeground(WHITE);
         statusLabel.setHorizontalAlignment(SwingConstants.CENTER);
         controlPanel.add(Box.createVerticalStrut(10));
         controlPanel.add(statusLabel);
@@ -107,6 +142,7 @@ public class PuzzleGUI extends JFrame {
         // Stats Label
         statsLabel = new JLabel(" ");
         statsLabel.setFont(new Font("Arial", Font.PLAIN, 12));
+        statsLabel.setForeground(LIGHT_RED);
         statsLabel.setHorizontalAlignment(SwingConstants.CENTER);
         controlPanel.add(Box.createVerticalStrut(5));
         controlPanel.add(statsLabel);
@@ -123,10 +159,10 @@ public class PuzzleGUI extends JFrame {
 
             if (c == '0') {
                 tiles[row][col].setText("");
-                tiles[row][col].setBackground(new Color(142, 118, 146));
+                tiles[row][col].setBackground(DARK_GRAY);
             } else {
                 tiles[row][col].setText(String.valueOf(c));
-                tiles[row][col].setBackground(new Color(87, 46, 84, 255));
+                tiles[row][col].setBackground(BRIGHT_RED);
             }
         }
     }
@@ -181,6 +217,7 @@ public class PuzzleGUI extends JFrame {
                             statsLabel.setText("Path length: " + solutionPath.size() +
                                     " | Time: " + duration + " ms");
                             startButton.setEnabled(true);
+                            startButton.setBackground(BRIGHT_RED);
                         } else {
                             statusLabel.setText("No solution found!");
                             statsLabel.setText(" ");
@@ -253,7 +290,7 @@ public class PuzzleGUI extends JFrame {
         solveButton.setEnabled(false);
         resetButton.setEnabled(true);
 
-        animationTimer = new Timer(500, new ActionListener() {
+        animationTimer = new Timer(1000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (currentStep < solutionPath.size()) {
@@ -310,6 +347,7 @@ public class PuzzleGUI extends JFrame {
         statsLabel.setText(" ");
         solveButton.setEnabled(true);
         startButton.setEnabled(false);
+        startButton.setBackground(DARK_RED);
     }
 
     private boolean isValidState(String state) {
