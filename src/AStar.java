@@ -2,16 +2,26 @@ import java.util.*;
 
 public class AStar {
 
-    private int misplacedTiles(String state, String goal) {
-        int count = 0;
+    private int manhatten(String state, String goal) {
+        int distance = 0;
+        int size = 3; // since it's a 3x3 puzzle
+    
         for (int i = 0; i < state.length(); i++) {
-            if (state.charAt(i) != '0' && state.charAt(i) != goal.charAt(i)) {
-                count++;
+            char c = state.charAt(i);
+            if (c != '0') {
+                int currentRow = i / size;
+                int currentCol = i % size;
+    
+                int goalIndex = goal.indexOf(c);
+                int goalRow = goalIndex / size;
+                int goalCol = goalIndex % size;
+    
+                distance += Math.abs(currentRow - goalRow) + Math.abs(currentCol - goalCol);
             }
         }
-        return count;
+        return distance;
     }
-
+    
     private List<String> reconstructPath(Node node) {
         List<String> optimalPath = new ArrayList<>();
         while (node != null) {
@@ -30,7 +40,7 @@ public class AStar {
         Map<String, Integer> visitedGScore = new HashMap<>();
         Set<String> closed = new HashSet<>();
 
-        Node startNode = new Node(start, null, null, 0, misplacedTiles(start, goal));
+        Node startNode = new Node(start, null, null, 0, manhatten(start, goal));
         frontier.add(startNode);
         visitedGScore.put(start, 0);
 
@@ -57,7 +67,7 @@ public class AStar {
                 }
 
                 visitedGScore.put(nextState, succG);
-                int h = misplacedTiles(nextState, goal);
+                int h = manhatten(nextState, goal);
                 Node nextNode = new Node(nextState, current, succ.getDirection(), succG, h);
                 frontier.add(nextNode);
 
