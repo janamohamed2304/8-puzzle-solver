@@ -59,9 +59,9 @@ public class Main {
             printBoard(n.state, i, n.action);
         }
 
-        System.out.println("Path cost: " + path.size());
+        System.out.println("Path cost: " + (path.size()-1));
         System.out.println("Number of Explored Nodes : " + solver.visited.size());
-        System.out.println("Search Depth: " + path.size());
+        System.out.println("Search Depth: " + (path.size()-1));
         System.out.println("Time: " + (endTime-startTime) + " ms");
 
         System.out.println("\n========= AStar Solution Path =========\n");

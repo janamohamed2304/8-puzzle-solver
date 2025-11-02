@@ -3,25 +3,16 @@ import java.util.*;
 public class BFS {
     Set<String> visited = new HashSet<>();
     int searchdepth=0;
-
-
     public List<Node> bfs(Node start) {
-
         Queue<Node> queue = new LinkedList<>();
-
         queue.add(start);
         visited.add(start.state);
-
         while (!queue.isEmpty()) {
-
             Node curr = queue.poll();
-
             if (curr.state.equals("012345678")) {
                 return buildPath(curr);
             }
-
             List<Pair> neighbors = Successors.getSuccessors(curr.state);
-
             for (Pair p : neighbors) {
                 searchdepth++;
                 if (!visited.contains(p.state)) {
