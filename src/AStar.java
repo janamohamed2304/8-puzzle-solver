@@ -41,8 +41,8 @@ public class AStar {
                 continue;
             closed.add(current.state);
 
-            System.out.println("Exploring state with f=" + current.f() +
-                    ", g=" + current.g + ", h=" + current.h + ": " + current.state);
+//            System.out.println("Exploring state with f=" + current.f() +
+//                    ", g=" + current.g + ", h=" + current.h + ": " + current.state);
 
             if (current.state.equals(goal)) {
                 return reconstructPath(current);
@@ -60,50 +60,10 @@ public class AStar {
                 int h = misplacedTiles(nextState, goal);
                 Node nextNode = new Node(nextState, current, succ.getDirection(), succG, h);
                 frontier.add(nextNode);
-                
+
             }
         }
         return null;
     }
 
-    private void printState(String state) {
-        for (int i = 0; i < state.length(); i++) {
-            if (i % 3 == 0) System.out.println();
-            System.out.print(state.charAt(i) + " ");
-        }
-        System.out.println("\n------");
-    }
-
-    public static void main(String[] args) {
-        String start = "724506831";
-        String goal = "123456780";
-
-        AStar solver = new AStar();
-        List<String> solution = solver.aStar(start, goal);
-
-        if (solution != null) {
-            System.out.println("Solution found in " + solution.size() + " moves:");
-            for (String move : solution) {
-                System.out.print(move + " ");
-            }
-
-            System.out.println("\n\nPath visualization:");
-            String currentState = start;
-            solver.printState(currentState);
-
-            for (String move : solution) {
-                for (Pair succ : Successors.getSuccessors(currentState)) {
-                    if (succ.getDirection().equals(move)) {
-                        currentState = succ.getState();
-                        break;
-                    }
-                }
-                System.out.println(move + ":");
-                solver.printState(currentState);
-            }
-
-        } else {
-            System.out.println("No solution found (unsolvable state).");
-        }
-    }
 }

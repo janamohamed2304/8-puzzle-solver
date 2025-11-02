@@ -18,7 +18,7 @@ public class IDFS {
             branch.add(start);
 
             List<Pair> path = new ArrayList<>();
-            path.add(new Pair("-", start));
+            path.add(new Pair(null, start));
 
             List<Pair> result = dls(start, d, branch, path);
             if (result != null) {

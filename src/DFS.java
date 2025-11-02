@@ -73,7 +73,7 @@ public class DFS {
             }
         }
 
-        System.out.println("\nGoal found at depth: " + (path.size() - 1));
+        System.out.println("Goal found at depth: " + (path.size() - 1));
         System.out.println("Nodes expanded: " + nodesExpanded);
         System.out.println("Max depth reached: " + maxDepth);
         System.out.println("Running time (ms): " + time);
